@@ -217,9 +217,6 @@ metrics:
     type_params:
       measure: order_total
       grain_to_date: month
-  - name: min_order_value
-    agg: min
-    expr: order_total
 saved_queries:
   - name: order_metrics
     description: testing out order metrics in one table 
