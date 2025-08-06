@@ -25,6 +25,12 @@ semantic_models:
         expr: order_total
       - name: is_food_order
         type: categorical
+      - name: is_drink_order
+        type: categorical
+      - name: last_ordered_at
+        type: time
+        type_params:
+          time_granularity: day
 
     measures:
       - name: order_total
@@ -74,6 +80,12 @@ semantic_models:
 
 metrics:
 #SIMPLE TYPE METRICS
+  - name: "order_count"
+    label: "order_count"
+    description: the number of orders placed
+    type: simple
+    type_params: 
+      measure: order_count 
   - name: "order_total"
     description: "Sum of orders value"
     type: simple
@@ -150,6 +162,17 @@ metrics:
 
 #Derived Metrics      
 
+  - name: "order_gross_profit"
+    description: "Gross profit from each order."
+    type: derived
+    label: "order_gross_profit"
+    type_params:
+      expr: revenue - cost
+      metrics:
+      - name: order_total
+        alias: revenue
+      - name: order_amount
+        alias: cost
   - name: "food_order_pct_cumulative"
     label: "food_order_as_percent_of_total_order_amount"    
     description: "Food order total as a % of total order amount"
@@ -194,6 +217,9 @@ metrics:
     type_params:
       measure: order_total
       grain_to_date: month
+  - name: min_order_value
+    agg: min
+    expr: order_total
 saved_queries:
   - name: order_metrics
     description: testing out order metrics in one table 
